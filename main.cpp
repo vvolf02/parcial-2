@@ -23,11 +23,11 @@ public:
 
         for (int j=0; j<n;j++){
             estacion = grupito(contenido, ",");//se ira quitando estacion por estacion contenido se modifica con resize(contenido)"berrio-1-0-63"
-            string estacPos = resize(estacion, "-");//"1-0-63"
-            estacPos = grupito(estacPos, "-");      //"1"
-            string estaDes = resize(estacPos, "-"); //"0-63"
-            string estacAnt = grupito(estaDes, "-");//"0"
-            estaDes = resize(estaDes, "-");         //"63"
+            string estacPos = resize(estacion, "-");//"1-0-63"2-22-0
+            estacPos = grupito(estacPos, "-");      //"1"2
+            string estaDes = resize(estacPos, "-"); //"0-63"  22-0
+            string estacAnt = grupito(estaDes, "-");//"0"     22
+            estaDes = resize(estaDes, "-");         //"63"    0
 
             size_t pos = estaDes.find("T");
 
@@ -44,11 +44,12 @@ public:
                     estacPosN+=1;
                     estacPos = to_string(estacPosN);
                 }
-                if(estacPosN=posN-1){
-                    estacAnt=Ant;
+                if(estacPosN==posN-1){
+                    estaDes=Ant;
+                    estacAnt="0";
                 }
-                if(estacPosN=posN+1){
-                    estaDes=Des;
+                if(estacPosN==posN+1){
+                    estacAnt=Des;
                 }
             }
 
@@ -78,7 +79,7 @@ public:
             }
             contenido = resize(contenido,",");
 
-            Copia+= estacion+"-"+estacPos+"-"+estacAnt+"-"+estaDes;
+            Copia+= estacion+"-"+estacPos+"-"+estacAnt+"-"+estaDes;///ACÄ//////////////////////
 
 
         }
@@ -89,37 +90,50 @@ public:
         string estacPos;
         string estacAnt;
         string estaDes;
-        std::cout<< "En que posicion de la linea quiere agregar la estacion?"<<std::endl;
-        std::cin>>estacPos;
-        subcadena+= "-"+estacPos;
+        int posN=20;
+        int q = numEstaciones()+1;
+        bool H=true;
+        while(posN>q && H){
+            cout<< "En que posicion de la linea quiere agregar la estacion?"<<std::endl;
+            cin>>estacPos;
+            posN = stoi(estacPos);
+            if(posN>q)
+                cout<<"posicion fuera de la linea"<<endl;
+        }
+
         std::cout<<"tiempo que esta a la anterior estacion?"<<std::endl;
         std::cin>>estacAnt;
-        subcadena+= "-"+estacAnt;
         std::cout<<"tiempo que esta a la siguiente estacion?"<<std::endl;
         std::cin>>estaDes;
-        subcadena+= "-"+estaDes;
         bool Bool=true;
-        modificarEstacionMas(estacPos,estacAnt,estaDes, Bool);
+        if(estacPos=="1")
+            estacAnt="0";
 
-        int m = numEstaciones() - 1;
+        string Q=to_string(q);
+
+        if(estacPos==Q)
+            estaDes="0";
+
+        int m = numEstaciones();
         string n = to_string(m);
-        if(estacPos=="0")
+        if(estacPos=="1")
             estacAnt="0";
         if(estacPos==n)
             estaDes="0";
+        modificarEstacionMas(estacPos,estacAnt,estaDes, Bool);
+
 
         if( x == false)
             subcadena+= "-"+estacPos+"-"+estacAnt+"-"+estaDes+"T";
+        if(x == true)
+            subcadena+= "-"+estacPos+"-"+estacAnt+"-"+estaDes;
 
-        subcadena+= "-"+estacPos+"-"+estacAnt+"-"+estaDes;
-        contenido += subcadena;
-
+        cout<<subcadena<<endl;
+        contenido += ","+subcadena;
+        cout<<contenido<<endl;
 
 
     }
-
-    //string quitarActualizando(string Cquita){ }
-
 
     void quitar(const string& subcadena) {
         size_t pos = contenido.find(subcadena);
@@ -150,7 +164,6 @@ public:
         contenido.erase(pos, DatosAntes.length());
 
     }
-
 
     string obtenerContenido() const {
         return contenido;
@@ -188,12 +201,27 @@ public:
     }
 };
 
+/*class Red : public Lineas{
+public:
+    void agregarLinea{
+
+    };
+
+    void QuitarLinea{
+
+    };
+
+};*/
+
+
 string resize(string row, char caracter);
 string grupito(string row, char caracter);
 string pedirLinea(Lineas (&matriz)[30][2], int tamano);
 bool encontrarEstacion(string row, string estacion, string* posicion);
 
 int main() {
+    //int g =numLineas(matriz, filas, "c");
+
     string linea;
     cout << "Ingrese el nombre de la linea" << endl;
     cin >> linea;
@@ -220,6 +248,14 @@ int main() {
     string estacion, estacion2, lineaComp, linea2, linea3, pos, lin;
     bool valid=true;
     int tamano=filas;
+
+    int g =matriz[30][2].numLineas(matriz, filas, "c");
+    cout<<"Estas son las lineas actuales"<<endl;
+    for(int t=0; t<g;t++){
+        string L ="";
+        L= matriz[t][0].obtenerContenido();
+        cout<<L<<endl;
+    }
     /*Esta seccion de codigo indica si la estacion ingresada se encuentra o no en la linea ingresada
     while(valid)
     {
@@ -344,15 +380,16 @@ int main() {
     string agregarEstacionT = "A";
     string Estacion;
     string LineaX;
-    bool lineasi = false;
+    bool lineasi = true;
     while (agregarEstacion != "no" && agregarEstacion=="si"){
-        cout<<"Desea agregar una nueba estacion?"<<endl;
+        cout<<"Desea agregar una nueva estacion?"<<endl;
         cin>>agregarEstacion;
 
 
         if (agregarEstacion=="si"){
             int n = matriz[30][2].numLineas(matriz, tamano, "c");//Numero de lineas
 
+            cout<<n<<endl;
             cout<< "Cómo gusta que se llame la estacion estacion?"<<std::endl;
             cin>>Estacion;
 
@@ -360,22 +397,23 @@ int main() {
             cin>>LineaX;
 
             int i=0;
-            while(!lineasi){
+            while(lineasi){
 
-                while(!lineasi && i<n){
+                while(lineasi && i<n){
 
                     if(matriz[i][0].obtenerContenido()==LineaX){
-                        matriz[i][1].agregarActualizando(Estacion, LineaX,!lineasi);
-                        lineasi=true;
+                        matriz[i][1].agregarActualizando(Estacion, LineaX,lineasi);
+                        lineasi=false;
                     }
                     i++;
 
                 }
-                if(lineasi==false){
+                if(lineasi==true){
                     cout<<"Esa linea no fue encontrada agregue otra"<<endl;
                     cin>>LineaX;
                 }
             }
+            lineasi=true;
 
 
             while (agregarEstacionT != "no" && agregarEstacionT !="si"){
@@ -390,7 +428,7 @@ int main() {
 
                 cout<<"A cuantas lineas quiere unir la nueva la estacion"<<endl;
                 cin>>cuantas;
-                while (n<cuantas){
+                while (n<=cuantas){
                     cout<<"numero de estaciones no encontrado, debe de ingresar menos"<<endl;
                     cin>>cuantas;
                 }
@@ -414,15 +452,18 @@ int main() {
                             cin>>LineaX;
                         }
                     }
+                    lineasi=true;
                 }
             }
-
+            string L = matriz[0][1].obtenerContenido();
+            cout<<L<<endl;
         }
+
     }
 
     /////AGREGAR ESTACION ESTÁ LISTO////
-    string eliminarEstacion = "A";
-    while (eliminarEstacion != "no" && eliminarEstacion!="si"){
+    string eliminarEstacion = "si";
+    while (eliminarEstacion != "no" && eliminarEstacion=="si"){
         cout<<"Desea Eliminar una estacion?"<<endl;
         cin>>eliminarEstacion;
 
@@ -449,15 +490,41 @@ int main() {
         }
     }
 
-    //agregarEstacion
+    ////QUITAR ESTACION LISTO/////
+
+    ////QUITAR LINEA//////
+    string eliminarLinea = "si";
+    while (eliminarLinea != "no" && eliminarLinea=="si"){
+        cout<<"Desea Eliminar una estacion?"<<endl;
+        cin>>eliminarEstacion;
+
+        if (eliminarLinea=="si"){
+            string nameEstacion="n";
+            string nameLinea;
+
+            cout<<"De cual linea quieres borrar la estacion?"<<endl;
+            cin>>nameLinea;
+
+            int m = matriz[30][2].numLineas(matriz, tamano, "c");
+            for (int i =0; i<m; i++){
+
+                if(matriz[i][0].obtenerContenido()==nameLinea){
+                    cout<<"Cual es el nombre de la estacion que quiere eliminar?"<<endl;
+                    cin>>nameEstacion;
+                    matriz[i][0].quitar(nameEstacion);
+                }
+                if(nameEstacion=="n")
+                    cout<<"Estacion no encontrada en la linea"<<endl;
+            }
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////
 
     return 0;
 }
 
-string resize(string row, char caracter)
-{
+string resize(string row, char caracter){
     string fila = "";
     int posicion = row.find(caracter);
     int tamano = row.size();
@@ -468,8 +535,7 @@ string resize(string row, char caracter)
     return fila;
 }
 
-string grupito(string row, char caracter)
-{
+string grupito(string row, char caracter){
     string grupo="";
     int posicion=row.find(caracter);
     for(int i=0; i<posicion; i++) {
@@ -478,10 +544,7 @@ string grupito(string row, char caracter)
     return grupo;
 }
 
-
-
-string resize(string row, const char* caracter)
-{
+string resize(string row, const char* caracter){
     string fila = "";
     int posicion = row.find(caracter);
     int tamano = row.size();
@@ -492,8 +555,7 @@ string resize(string row, const char* caracter)
     return fila;
 }
 
-string grupito(string row, const char* caracter)
-{
+string grupito(string row, const char* caracter){
     string grupo="";
     int posicion=row.find(caracter);
     for(int i=0; i<posicion; i++) {
@@ -502,8 +564,7 @@ string grupito(string row, const char* caracter)
     return grupo;
 }
 
-string pedirLinea(Lineas (&matriz)[30][2], int tamano)
-{
+string pedirLinea(Lineas (&matriz)[30][2], int tamano){
     bool valid=true;
     string linea;
     while(valid)
@@ -525,8 +586,7 @@ string pedirLinea(Lineas (&matriz)[30][2], int tamano)
     return linea;
 }
 
-bool encontrarEstacion(string row, string estacion, string* posicion)
-{
+bool encontrarEstacion(string row, string estacion, string* posicion){
     bool valid=true;
     string linea2, linea3, lpos;
     linea2=resize(row, ':');
