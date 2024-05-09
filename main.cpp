@@ -104,7 +104,7 @@ int main() {
     valid=encontrarEstacion(lineaComp, estacion, &pos);
     if(valid)
     cout<<"La estacion "<<estacion<<" si se encuentra en la linea "<<linea<<endl;*/
-    
+
     /*Esta seccion del codigo indica el tiempo que demora en ir de una estacion a otra
     valid=false;
     int tiempo=0;
@@ -142,7 +142,7 @@ int main() {
     if(posicion1<posicion2)
     {
         valid=false;
-        linea1=resize(row, ':');
+        linea1=row;
         while(!valid)
         {            
             linea2=resize(linea1, '-');
@@ -163,7 +163,7 @@ int main() {
     else if(posicion1>posicion2)
     {
         valid=false;
-        linea1=resize(row, ':');
+        linea1=row;
         while(!valid)
         {            
             linea2=resize(linea1, '-');
@@ -248,7 +248,7 @@ bool encontrarEstacion(string row, string estacion, string* posicion)
 {
     bool valid=true;
     string linea2, linea3, lpos;
-    linea2=resize(row, ':');
+    linea2=row;
     while(valid)
     {
         linea3=grupito(linea2, '-');
@@ -268,3 +268,6 @@ bool encontrarEstacion(string row, string estacion, string* posicion)
     valid=true;
     return valid;//retorna true si la estacion si se encuentra en la linea
 }
+
+
+
